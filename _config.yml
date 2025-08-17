@@ -3,7 +3,7 @@ tagline: "Affiliate tech & tools"
 author: YOUR_NAME
 email: your@email.com
 description: "Honest reviews, comparisons, and tutorials."
-url: "https://YOUR_USERNAME.github.io"   # EDIT
+url: "https://amineelom.github.io"   # EDIT
 baseurl: "/myblogger"                     # keep this if repo name is myblogger
 permalink: /:categories/:title/
 markdown: kramdown
