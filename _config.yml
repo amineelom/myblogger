@@ -1,0 +1,44 @@
+title: "myblogger"
+tagline: "Affiliate tech & tools"
+author: YOUR_NAME
+email: your@email.com
+description: "Honest reviews, comparisons, and tutorials."
+url: "https://YOUR_USERNAME.github.io"   # EDIT
+baseurl: "/myblogger"                     # keep this if repo name is myblogger
+permalink: /:categories/:title/
+markdown: kramdown
+timezone: Africa/Casablanca
+
+# Enable safe, GitHub-Pages-friendly plugins
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# Navigation (you can add/remove items)
+nav:
+  - title: Home
+    url: /
+  - title: Articles
+    url: /articles/
+  - title: Tags
+    url: /tags/
+  - title: About
+    url: /about/
+  - title: Contact
+    url: /contact/
+  - title: Disclosure
+    url: /disclosure/
+  - title: Privacy
+    url: /privacy/
+
+# Collections or defaults (assign default layout)
+defaults:
+  - scope: {path: ""}
+    values: {layout: default}
+  - scope: {path: "", type: posts}
+    values: {layout: post}
+
+# Build output
+sass:
+  style: compressed

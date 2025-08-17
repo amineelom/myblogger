@@ -1,0 +1,31 @@
+---
+layout: default
+---
+<article class="post">
+  <h1>{{ page.title }}</h1>
+  <p class="muted">{{ page.date | date: "%B %d, %Y" }} · {% if page.author %}{{ page.author }}{% else %}{{ site.author }}{% endif %}</p>
+
+  {{ content }}
+
+  {% if page.tags %}
+  <p class="tags">Tags:
+    {% for t in page.tags %}
+      <a href="{{ '/tags/#' | append: t | relative_url }}">#{{ t }}</a>
+    {% endfor %}
+  </p>
+  {% endif %}
+</article>
+
+<!-- Simple BlogPosting JSON-LD -->
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"BlogPosting",
+  "headline":"{{ page.title | escape }}",
+  "datePublished":"{{ page.date | date_to_xmlschema }}",
+  "dateModified":"{{ page.last_modified_at | default: page.date | date_to_xmlschema }}",
+  "author":{"@type":"Person","name":"{{ page.author | default: site.author | escape }}"},
+  "mainEntityOfPage":{"@type":"WebPage","@id":"{{ site.url }}{{ page.url }}"},
+  "publisher":{"@type":"Organization","name":"{{ site.title | escape }}"}
+}
+</script>
