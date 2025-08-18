@@ -14,7 +14,9 @@
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="{{ site.baseurl }}/">{{ site.title }}</a>
+    <a href="{{ site.baseurl }}/">
+  <img src="{{ site.baseurl }}/assets/images/default-monochrome-black.svg" alt="MarketReviews Logo" style="height:30px;">
+</a>
     <nav>
       {% for item in site.nav %}
         <a href="{{ site.baseurl }}{{ item.url }}">{{ item.title }}</a>
