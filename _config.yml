@@ -4,7 +4,7 @@ author: YOUR_NAME
 email: your@email.com
 description: "Honest reviews, comparisons, and tutorials."
 url: "http://markereviews.com"   
-baseurl: "/myblogger"                     
+baseurl: ""                     
 permalink: /:categories/:title/
 markdown: kramdown
 timezone: Africa/Casablanca
