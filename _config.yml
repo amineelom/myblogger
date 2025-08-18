@@ -3,8 +3,8 @@ tagline: "Affiliate tech & tools"
 author: YOUR_NAME
 email: your@email.com
 description: "Honest reviews, comparisons, and tutorials."
-url: "http://markereviews.com"   # EDIT
-baseurl: "/myblogger"                     # keep this if repo name is myblogger
+url: "http://markereviews.com"   
+baseurl: "/myblogger"                     
 permalink: /:categories/:title/
 markdown: kramdown
 timezone: Africa/Casablanca
