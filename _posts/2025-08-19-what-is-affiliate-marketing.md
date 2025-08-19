@@ -5,7 +5,7 @@ description: "Learn everything about affiliate marketing in 2025: how it works, 
 author: "MarketReviews Team"
 categories: [Affiliate Marketing, Beginners Guide, 2025]
 tags: [affiliate marketing, beginners guide, 2025, make money online, passive income]
-excerpt: Learn everything about affiliate marketing in 2025: how it works, why it’s so powerful, and step-by-step strategies to start and succeed as a beginner.
+excerpt: "Learn everything about affiliate marketing in 2025: how it works, why it’s so powerful, and step-by-step strategies to start and succeed as a beginner."
 ---
 
 # What Is Affiliate Marketing? A Complete Beginner’s Guide (2025 Update)
