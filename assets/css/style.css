@@ -20,8 +20,8 @@ code, pre{background:#f6f8fa; padding:.2rem .4rem; border-radius:.3rem;}
 
 /* Navigation restructure */
 .site-nav{display:flex; align-items:center; gap:1rem;}
-.site-header .site-nav ul{list-style:none !important; margin:0; padding:0; display:flex; gap:.75rem; align-items:center;}
-.site-nav ul{display:flex; gap:.25rem;}
+.site-header .site-nav ul{list-style:none; margin:0; padding:0;}
+.site-header .site-nav .nav-primary{display:flex; gap:.75rem; align-items:center;}
 .site-header li{list-style:none !important;}
 .site-nav li{margin:0;}
 .site-nav a{margin-right:0; padding:.5rem .65rem; border-radius:.4rem;}
