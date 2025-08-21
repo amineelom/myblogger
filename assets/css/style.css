@@ -15,6 +15,159 @@ nav a{margin-right:.75rem;}
 .post img{max-width:100%; height:auto;}
 code, pre{background:#f6f8fa; padding:.2rem .4rem; border-radius:.3rem;}
 
+/* Social Sharing Styles */
+.social-sharing {
+  margin: 3rem 0;
+  padding: 2rem;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.social-sharing h3 {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.2rem;
+  color: var(--fg);
+  text-align: center;
+}
+
+.social-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.social-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--fg);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.social-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  text-decoration: none;
+}
+
+.social-btn svg {
+  flex-shrink: 0;
+}
+
+/* Social Platform Colors */
+.social-btn.twitter:hover {
+  background: #1da1f2;
+  color: #fff;
+  border-color: #1da1f2;
+}
+
+.social-btn.facebook:hover {
+  background: #1877f2;
+  color: #fff;
+  border-color: #1877f2;
+}
+
+.social-btn.linkedin:hover {
+  background: #0a66c2;
+  color: #fff;
+  border-color: #0a66c2;
+}
+
+.social-btn.reddit:hover {
+  background: #ff4500;
+  color: #fff;
+  border-color: #ff4500;
+}
+
+.social-btn.copy-link:hover {
+  background: var(--link);
+  color: #fff;
+  border-color: var(--link);
+}
+
+.social-btn.copy-link.copied {
+  background: #10b981;
+  color: #fff;
+  border-color: #10b981;
+}
+
+/* Responsive Social Buttons */
+@media (max-width: 600px) {
+  .social-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .social-btn {
+    justify-content: center;
+    padding: 1rem 1.5rem;
+  }
+  
+  .social-sharing {
+    padding: 1.5rem;
+    margin: 2rem 0;
+  }
+}
+
+/* Quick Social Sharing for Home Page */
+.quick-social-sharing {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  align-items: center;
+}
+
+.quick-social-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--muted);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.quick-social-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  text-decoration: none;
+}
+
+.quick-social-btn.twitter:hover {
+  background: #1da1f2;
+  color: #fff;
+  border-color: #1da1f2;
+}
+
+.quick-social-btn.facebook:hover {
+  background: #1877f2;
+  color: #fff;
+  border-color: #1877f2;
+}
+
+.quick-social-btn.linkedin:hover {
+  background: #0a66c2;
+  color: #fff;
+  border-color: #0a66c2;
+}
+
 /* Overlay */
 .site-overlay{position:fixed; inset:0; background:rgba(0,0,0,.35); z-index:900;}
 
