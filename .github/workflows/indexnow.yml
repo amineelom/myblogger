@@ -27,11 +27,16 @@ jobs:
       - name: Submit URLs to IndexNow
         env:
           MODE: ${{ github.event.inputs.mode }}
+          INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
         run: |
           set -euo pipefail
 
           DOMAIN="markereviews.com"
-          KEY="f23529503e774ad79005911ed314be91"
+          KEY="${INDEXNOW_KEY:-}"
+          if [ -z "$KEY" ]; then
+            echo "Missing INDEXNOW_KEY secret. Add it in Settings > Secrets and variables > Actions." >&2
+            exit 1
+          fi
           KEY_LOCATION="https://$DOMAIN/$KEY.txt"
           BASE_URL="https://$DOMAIN"
 
@@ -193,4 +198,6 @@ jobs:
           if [ "$HTTP_STATUS" != "200" ] && [ "$HTTP_STATUS" != "202" ]; then
             echo "IndexNow submission failed with status $HTTP_STATUS" >&2
             exit 1
-          fi 
+          fi
+
+          echo "::notice:: Submitted ${#UNIQUE[@]} URLs" 
