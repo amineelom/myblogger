@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "What Is HTML A Complete Beginner’s Guide (2025 Update)"
-categories: [Career, Coding, Technology]
+categories: [Web Development, Coding Basics, Learn to Code]
 date: 2025-08-22
 author: "MarketReviews Team"
 excerpt: "Discover what HTML is, why it’s essential in 2025, and how beginners can quickly learn to code websites. Includes practical examples, SEO tips, and FAQs."
