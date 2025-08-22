@@ -1,0 +1,95 @@
+name: IndexNow Submit
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Submit changed URLs to IndexNow
+        run: |
+          set -euo pipefail
+
+          DOMAIN="markereviews.com"
+          KEY="f23529503e774ad79005911ed314be91"
+          KEY_LOCATION="https://$DOMAIN/$KEY.txt"
+          BASE_URL="https://$DOMAIN"
+
+          # Determine changed files in the last commit range
+          if git rev-parse HEAD~1 >/dev/null 2>&1; then
+            CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD || true)
+          else
+            # In case this is the first commit on a new branch; include tracked files
+            CHANGED_FILES=$(git ls-files)
+          fi
+
+          declare -a URLS
+
+          for f in $CHANGED_FILES; do
+            case "$f" in
+              _posts/*.md)
+                file=$(basename "$f")
+                # Strip date prefix YYYY-MM-DD- and extension
+                title_only="${file#????-??-??-}"
+                slug="${title_only%.md}"
+                URLS+=("$BASE_URL/$slug/")
+                ;;
+              pages/*.md)
+                fname="${f#pages/}"
+                slug="${fname%.md}"
+                if [ "$slug" = "index" ]; then
+                  path="/"
+                else
+                  path="/$slug/"
+                fi
+                URLS+=("$BASE_URL$path")
+                ;;
+              index.md|index.html|_layouts/*|assets/*|_config.yml)
+                URLS+=("$BASE_URL/")
+                ;;
+            esac
+          done
+
+          # Always include homepage to be safe
+          URLS+=("$BASE_URL/")
+
+          # Deduplicate
+          mapfile -t UNIQUE < <(printf "%s\n" "${URLS[@]}" | awk '!seen[$0]++')
+
+          if [ "${#UNIQUE[@]}" -eq 0 ]; then
+            echo "No URLs to submit."
+            exit 0
+          fi
+
+          echo "URLs to submit:" && printf "%s\n" "${UNIQUE[@]}"
+
+          # Ensure jq is available
+          if ! command -v jq >/dev/null 2>&1; then
+            sudo apt-get update -y
+            sudo apt-get install -y jq
+          fi
+
+          # Build JSON payload and submit to IndexNow
+          URLS_JSON=$(printf '"%s",' "${UNIQUE[@]}" | sed 's/,$//')
+          PAYLOAD=$(jq -n \
+            --arg host "$DOMAIN" \
+            --arg key "$KEY" \
+            --arg keyLocation "$KEY_LOCATION" \
+            --argjson urlList "[$URLS_JSON]" \
+            '{host:$host, key:$key, keyLocation:$keyLocation, urlList:$urlList}')
+
+          echo "Submitting to IndexNow..."
+          set -x
+          curl -sS -X POST 'https://api.indexnow.org/indexnow' \
+            -H 'Content-Type: application/json' \
+            -d "$PAYLOAD" | cat
+          set +x 

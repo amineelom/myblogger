@@ -15,6 +15,9 @@ plugins:
   - jekyll-sitemap
   - jekyll-seo-tag
 
+include:
+  - f23529503e774ad79005911ed314be91.txt
+
 # Navigation (you can add/remove items)
 nav:
   - title: Home
