@@ -166,12 +166,12 @@ jobs:
           echo "URLs to submit (count=${#UNIQUE[@]}):" && printf "%s\n" "${UNIQUE[@]}"
 
           # Ensure jq is available
-          if ! command -v jq >/dev/null 2>&1; then
+          if ! command -v jq >/dev/null ; then
             sudo apt-get update -y
             sudo apt-get install -y jq
           fi
 
-          # Build JSON payload and submit to IndexNow
+          # Build JSON payload
           URLS_JSON=$(printf '"%s",' "${UNIQUE[@]}" | sed 's/,$//')
           PAYLOAD=$(jq -n \
             --arg host "$DOMAIN" \
@@ -182,7 +182,15 @@ jobs:
 
           echo "Submitting to IndexNow..."
           set -x
-          curl -sS -X POST 'https://api.indexnow.org/indexnow' \
+          HTTP_STATUS=$(curl -sS -o /tmp/indexnow_response.txt -w "%{http_code}" -X POST 'https://api.indexnow.org/indexnow' \
             -H 'Content-Type: application/json' \
-            -d "$PAYLOAD" | cat
-          set +x 
+            -d "$PAYLOAD")
+          set +x
+          echo "IndexNow HTTP status: $HTTP_STATUS"
+          echo "Response body:"
+          cat /tmp/indexnow_response.txt | sed -e 's/.*/  &/'
+
+          if [ "$HTTP_STATUS" != "200" ] && [ "$HTTP_STATUS" != "202" ]; then
+            echo "IndexNow submission failed with status $HTTP_STATUS" >&2
+            exit 1
+          fi 
