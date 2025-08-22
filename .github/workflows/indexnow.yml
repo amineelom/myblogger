@@ -5,6 +5,15 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      mode:
+        description: "Submission mode: changed (default) or all"
+        required: false
+        default: "changed"
+        type: choice
+        options:
+          - changed
+          - all
 
 jobs:
   submit:
@@ -15,7 +24,9 @@ jobs:
         with:
           fetch-depth: 2
 
-      - name: Submit changed URLs to IndexNow
+      - name: Submit URLs to IndexNow
+        env:
+          MODE: ${{ github.event.inputs.mode }}
         run: |
           set -euo pipefail
 
@@ -24,28 +35,110 @@ jobs:
           KEY_LOCATION="https://$DOMAIN/$KEY.txt"
           BASE_URL="https://$DOMAIN"
 
-          # Determine changed files in the last commit range
-          if git rev-parse HEAD~1 >/dev/null 2>&1; then
-            CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD || true)
-          else
-            # In case this is the first commit on a new branch; include tracked files
-            CHANGED_FILES=$(git ls-files)
-          fi
+          MODE=${MODE:-changed}
+          echo "Mode: $MODE"
+
+          # Helpers
+          slugify() {
+            # lowercase, replace non-alnum with hyphen, squeeze, trim
+            local s="$1"
+            s="${s,,}"
+            s=$(echo -n "$s" | sed -E 's/[^a-z0-9]+/-/g; s/^-+//; s/-+$//; s/-{2,}/-/g')
+            printf '%s' "$s"
+          }
+
+          extract_categories_path() {
+            # Print categories path like cat1/cat2 from YAML front matter
+            local file="$1"
+            # Extract front matter block
+            local fm
+            fm=$(awk 'f==0 && /^---$/ {f=1; next} f==1 && /^---$/ {exit} f==1 {print}' "$file" || true)
+
+            # Try bracket array style first: categories: [A, B, C]
+            local line
+            line=$(printf '%s\n' "$fm" | grep -E '^categories:' || true)
+            if [ -n "$line" ] && printf '%s' "$line" | grep -q '\['; then
+              local inner
+              inner=$(printf '%s' "$line" | sed -E 's/^categories:[[:space:]]*\[(.*)\].*/\1/')
+              # split by comma
+              local IFS=','
+              local parts=()
+              read -r -a parts <<< "$inner"
+              local out=()
+              for p in "${parts[@]}"; do
+                p=$(echo -n "$p" | sed -E "s/^['\"]?//; s/['\"]?$//; s/^ +//; s/ +$//")
+                [ -z "$p" ] && continue
+                out+=("$(slugify "$p")")
+              done
+              if [ ${#out[@]} -gt 0 ]; then
+                printf '%s' "$(IFS=/; echo "${out[*]}")"
+                return 0
+              fi
+            fi
+
+            # Try YAML list style:
+            # categories:\n - Cat One\n - Cat Two
+            if printf '%s\n' "$fm" | grep -Eq '^categories:[[:space:]]*$'; then
+              local after
+              after=$(printf '%s\n' "$fm" | awk 's==0{if($0~/^categories:[[:space:]]*$/) {s=1; next} else next} s==1{print}')
+              local out=()
+              while IFS= read -r l; do
+                # stop if next key appears
+                if printf '%s' "$l" | grep -Eq '^[a-zA-Z0-9_]+:'; then
+                  break
+                fi
+                if printf '%s' "$l" | grep -Eq '^[[:space:]]*-[[:space:]]'; then
+                  local val
+                  val=$(printf '%s' "$l" | sed -E 's/^[[:space:]]*-[[:space:]]*//; s/^['\"]?//; s/['\"]?$//')
+                  [ -z "$val" ] || out+=("$(slugify "$val")")
+                fi
+              done <<< "$after"
+              if [ ${#out[@]} -gt 0 ]; then
+                printf '%s' "$(IFS=/; echo "${out[*]}")"
+                return 0
+              fi
+            fi
+
+            return 1
+          }
 
           declare -a URLS
 
-          for f in $CHANGED_FILES; do
+          # Collect candidate files
+          if [ "$MODE" = "all" ]; then
+            echo "Collecting all posts and pages..."
+            FILES=$(git ls-files "_posts/*.md" "pages/*.md" 2>/dev/null || true)
+          else
+            echo "Collecting changed files..."
+            if git rev-parse HEAD~1 >/dev/null 2>&1; then
+              FILES=$(git diff --name-only HEAD~1 HEAD || true)
+            else
+              FILES=$(git ls-files)
+            fi
+          fi
+
+          for f in $FILES; do
             case "$f" in
               _posts/*.md)
                 file=$(basename "$f")
-                # Strip date prefix YYYY-MM-DD- and extension
                 title_only="${file#????-??-??-}"
                 slug="${title_only%.md}"
-                URLS+=("$BASE_URL/$slug/")
+                slug="${slug,,}"
+                # Build category path if any
+                cat_path=""
+                if c=$(extract_categories_path "$f"); then
+                  cat_path="$c"
+                fi
+                if [ -n "$cat_path" ]; then
+                  URLS+=("$BASE_URL/$cat_path/$slug/")
+                else
+                  URLS+=("$BASE_URL/$slug/")
+                fi
                 ;;
               pages/*.md)
                 fname="${f#pages/}"
                 slug="${fname%.md}"
+                slug="${slug,,}"
                 if [ "$slug" = "index" ]; then
                   path="/"
                 else
@@ -54,12 +147,12 @@ jobs:
                 URLS+=("$BASE_URL$path")
                 ;;
               index.md|index.html|_layouts/*|assets/*|_config.yml)
-                URLS+=("$BASE_URL/")
+                [ "$MODE" = "changed" ] && URLS+=("$BASE_URL/") || true
                 ;;
             esac
           done
 
-          # Always include homepage to be safe
+          # Always include homepage once
           URLS+=("$BASE_URL/")
 
           # Deduplicate
@@ -70,7 +163,7 @@ jobs:
             exit 0
           fi
 
-          echo "URLs to submit:" && printf "%s\n" "${UNIQUE[@]}"
+          echo "URLs to submit (count=${#UNIQUE[@]}):" && printf "%s\n" "${UNIQUE[@]}"
 
           # Ensure jq is available
           if ! command -v jq >/dev/null 2>&1; then
