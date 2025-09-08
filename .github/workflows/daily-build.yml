@@ -23,8 +23,8 @@ jobs:
           gem install bundler
           bundle install
 
-      - name: Build site with future posts
-        run: bundle exec jekyll build --future
+      - name: Build site
+  run: bundle exec jekyll build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
