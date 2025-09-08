@@ -1,10 +1,9 @@
 name: Daily Jekyll Build
 
-# Run once per day at midnight
 on:
   schedule:
-    - cron: '0 0 * * *'  # UTC midnight daily
-  workflow_dispatch:      # optional: allows manual trigger
+    - cron: '0 0 * * *'   # Every day at 00:00 UTC
+  workflow_dispatch:
 
 jobs:
   build:
@@ -17,7 +16,7 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.2'  # or the version you use for Jekyll
+          ruby-version: '3.2'
 
       - name: Install dependencies
         run: |
@@ -27,8 +26,19 @@ jobs:
       - name: Build site with future posts
         run: bundle exec jekyll build --future
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      # Upload built site for GitHub Pages to serve
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_site
+          path: ./_site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
