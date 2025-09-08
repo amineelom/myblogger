@@ -2,8 +2,8 @@ name: Daily Jekyll Build
 
 on:
   schedule:
-    - cron: '0 0 * * *'   # Every day at 00:00 UTC
-  workflow_dispatch:
+    - cron: '0 0 * * *'   # every day at 00:00 UTC
+  workflow_dispatch:       # allow manual trigger
 
 jobs:
   build:
@@ -26,7 +26,6 @@ jobs:
       - name: Build site with future posts
         run: bundle exec jekyll build --future
 
-      # Upload built site for GitHub Pages to serve
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
@@ -35,10 +34,14 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages       # 🔑 REQUIRED
+      url: ${{ steps.deployment.outputs.page_url }}
     permissions:
       pages: write
       id-token: write
 
     steps:
       - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4
