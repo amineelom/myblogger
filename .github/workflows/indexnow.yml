@@ -5,7 +5,7 @@ on:
     branches:
       - main
   workflow_run:
-    workflows: ["Daily Jekyll Build"] 
+    workflows: ["Daily Jekyll Build"]
     types:
       - completed
   workflow_dispatch:
@@ -32,6 +32,7 @@ jobs:
         env:
           MODE: ${{ github.event.inputs.mode }}
           INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
+          EVENT_NAME: ${{ github.event_name }}
         run: |
           set -euo pipefail
 
@@ -45,11 +46,11 @@ jobs:
           BASE_URL="https://$DOMAIN"
 
           MODE=${MODE:-changed}
+          echo "Event: $EVENT_NAME"
           echo "Mode: $MODE"
 
           # Helpers
           slugify() {
-            # lowercase, replace non-alnum with hyphen, squeeze, trim
             local s="$1"
             s="${s,,}"
             s=$(echo -n "$s" | sed -E 's/[^a-z0-9]+/-/g; s/^-+//; s/-+$//; s/-{2,}/-/g')
@@ -57,19 +58,15 @@ jobs:
           }
 
           extract_categories_path() {
-            # Print categories path like cat1/cat2 from YAML front matter
             local file="$1"
-            # Extract front matter block
             local fm
             fm=$(awk 'f==0 && /^---$/ {f=1; next} f==1 && /^---$/ {exit} f==1 {print}' "$file" || true)
 
-            # Try bracket array style first: categories: [A, B, C]
             local line
             line=$(printf '%s\n' "$fm" | grep -E '^categories:' || true)
             if [ -n "$line" ] && printf '%s' "$line" | grep -q '\['; then
               local inner
               inner=$(printf '%s' "$line" | sed -E 's/^categories:[[:space:]]*\[(.*)\].*/\1/')
-              # split by comma
               local IFS=','
               local parts=()
               read -r -a parts <<< "$inner"
@@ -85,14 +82,11 @@ jobs:
               fi
             fi
 
-            # Try YAML list style:
-            # categories:\n - Cat One\n - Cat Two
             if printf '%s\n' "$fm" | grep -Eq '^categories:[[:space:]]*$'; then
               local after
               after=$(printf '%s\n' "$fm" | awk 's==0{if($0~/^categories:[[:space:]]*$/) {s=1; next} else next} s==1{print}')
               local out=()
               while IFS= read -r l; do
-                # stop if next key appears
                 if printf '%s' "$l" | grep -Eq '^[a-zA-Z0-9_]+:'; then
                   break
                 fi
@@ -107,61 +101,85 @@ jobs:
                 return 0
               fi
             fi
-
             return 1
           }
 
           declare -a URLS
+          today=$(date -u +%Y-%m-%d)
 
-          # Collect candidate files
-          if [ "$MODE" = "all" ]; then
-            echo "Collecting all posts and pages..."
-            FILES=$(git ls-files "_posts/*.md" "pages/*.md" 2>/dev/null || true)
-          else
-            echo "Collecting changed files..."
-            if git rev-parse HEAD~1 >/dev/null 2>&1; then
-              FILES=$(git diff --name-only HEAD~1 HEAD || true)
-            else
-              FILES=$(git ls-files)
-            fi
-          fi
+          if [ "$EVENT_NAME" = "workflow_run" ]; then
+            echo "Daily build run: checking for posts dated today..."
+            for f in _posts/*.md; do
+              [ -f "$f" ] || continue
+              filename=$(basename "$f")
+              post_date="${filename:0:10}"
 
-          for f in $FILES; do
-            case "$f" in
-              _posts/*.md)
-                file=$(basename "$f")
-                title_only="${file#????-??-??-}"
+              if [ "$post_date" = "$today" ]; then
+                title_only="${filename#????-??-??-}"
                 slug="${title_only%.md}"
                 slug="${slug,,}"
-                # Build category path if any
+
                 cat_path=""
                 if c=$(extract_categories_path "$f"); then
                   cat_path="$c"
                 fi
+
                 if [ -n "$cat_path" ]; then
                   URLS+=("$BASE_URL/$cat_path/$slug/")
                 else
                   URLS+=("$BASE_URL/$slug/")
                 fi
-                ;;
-              pages/*.md)
-                fname="${f#pages/}"
-                slug="${fname%.md}"
-                slug="${slug,,}"
-                if [ "$slug" = "index" ]; then
-                  path="/"
-                else
-                  path="/$slug/"
-                fi
-                URLS+=("$BASE_URL$path")
-                ;;
-              index.md|index.html|_layouts/*|assets/*|_config.yml)
-                [ "$MODE" = "changed" ] && URLS+=("$BASE_URL/") || true
-                ;;
-            esac
-          done
+              fi
+            done
+          else
+            if [ "$MODE" = "all" ]; then
+              echo "Collecting all posts and pages..."
+              FILES=$(git ls-files "_posts/*.md" "pages/*.md" 2>/dev/null || true)
+            else
+              echo "Collecting changed files..."
+              if git rev-parse HEAD~1 >/dev/null 2>&1; then
+                FILES=$(git diff --name-only HEAD~1 HEAD || true)
+              else
+                FILES=$(git ls-files)
+              fi
+            fi
 
-          # Always include homepage once
+            for f in $FILES; do
+              case "$f" in
+                _posts/*.md)
+                  file=$(basename "$f")
+                  title_only="${file#????-??-??-}"
+                  slug="${title_only%.md}"
+                  slug="${slug,,}"
+                  cat_path=""
+                  if c=$(extract_categories_path "$f"); then
+                    cat_path="$c"
+                  fi
+                  if [ -n "$cat_path" ]; then
+                    URLS+=("$BASE_URL/$cat_path/$slug/")
+                  else
+                    URLS+=("$BASE_URL/$slug/")
+                  fi
+                  ;;
+                pages/*.md)
+                  fname="${f#pages/}"
+                  slug="${fname%.md}"
+                  slug="${slug,,}"
+                  if [ "$slug" = "index" ]; then
+                    path="/"
+                  else
+                    path="/$slug/"
+                  fi
+                  URLS+=("$BASE_URL$path")
+                  ;;
+                index.md|index.html|_layouts/*|assets/*|_config.yml)
+                  [ "$MODE" = "changed" ] && URLS+=("$BASE_URL/") || true
+                  ;;
+              esac
+            done
+          fi
+
+          # Always include homepage
           URLS+=("$BASE_URL/")
 
           # Deduplicate
@@ -174,13 +192,11 @@ jobs:
 
           echo "URLs to submit (count=${#UNIQUE[@]}):" && printf "%s\n" "${UNIQUE[@]}"
 
-          # Ensure jq is available
           if ! command -v jq >/dev/null ; then
             sudo apt-get update -y
             sudo apt-get install -y jq
           fi
 
-          # Build JSON payload
           URLS_JSON=$(printf '"%s",' "${UNIQUE[@]}" | sed 's/,$//')
           PAYLOAD=$(jq -n \
             --arg host "$DOMAIN" \
@@ -204,4 +220,4 @@ jobs:
             exit 1
           fi
 
-          echo "::notice:: Submitted ${#UNIQUE[@]} URLs" 
+          echo "::notice:: Submitted ${#UNIQUE[@]} URLs"
