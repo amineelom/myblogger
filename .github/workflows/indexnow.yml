@@ -148,6 +148,15 @@ jobs:
               case "$f" in
                 _posts/*.md)
                   file=$(basename "$f")
+                  post_date="${file:0:10}"  # extrait la date YYYY-MM-DD depuis le nom du fichier
+                  today=$(date -u +%Y-%m-%d)
+
+                  # Ne soumettre que si la date est passée ou aujourd’hui
+                  if [[ "$post_date" > "$today" ]]; then
+                    echo "Skipping future post: $file"
+                    continue
+                  fi
+
                   title_only="${file#????-??-??-}"
                   slug="${title_only%.md}"
                   slug="${slug,,}"
