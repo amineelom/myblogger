@@ -1,0 +1,44 @@
+name: Post to Reddit
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '_posts/**'
+  workflow_dispatch:
+    inputs:
+      post_file:
+        description: 'Post file to share (e.g., 2025-11-09-how-ai-models-learn-explained-2025.md)'
+        required: false
+        type: string
+
+jobs:
+  post-to-reddit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install praw pyyaml
+
+      - name: Post to Reddit
+        env:
+          REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
+          REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
+          REDDIT_USERNAME: ${{ secrets.REDDIT_USERNAME }}
+          REDDIT_PASSWORD: ${{ secrets.REDDIT_PASSWORD }}
+          REDDIT_SUBREDDIT: ${{ secrets.REDDIT_SUBREDDIT }}
+          SITE_URL: ${{ secrets.SITE_URL }}
+          POST_FILE: ${{ github.event.inputs.post_file }}
+        run: |
+          python .github/scripts/post_to_reddit.py
