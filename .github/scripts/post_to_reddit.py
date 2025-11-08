@@ -1,9 +1,12 @@
 import os
 import re
-import yaml
-import praw
-from datetime import datetime
 import subprocess
+import time
+from datetime import datetime
+
+import praw
+import yaml
+
 
 def extract_frontmatter(content):
     """Extract YAML frontmatter from markdown file."""
@@ -105,21 +108,31 @@ def post_to_reddit(post_path):
             password=os.environ['REDDIT_PASSWORD'],
             user_agent='MarkeReviews Blog Poster v1.0'
         )
-        
-        subreddit_name = os.environ.get('REDDIT_SUBREDDIT', 'test')
-        subreddit = reddit.subreddit(subreddit_name)
-        
-        # Submit the post
-        submission = subreddit.submit(
-            title=reddit_title,
-            selftext=reddit_body
-        )
-        
-        print(f"✅ Successfully posted to r/{subreddit_name}")
-        print(f"Post URL: {submission.url}")
-        print(f"Post Title: {reddit_title}")
+        subreddits_env = os.environ.get('REDDIT_SUBREDDITS', '')
+        subreddit_list = [s.strip() for s in subreddits_env.split(',') if s.strip()]
+
+        if not subreddit_list:
+            print("❌ No subreddits specified. Please set REDDIT_SUBREDDITS in your GitHub secrets.")
+            return False
+
+        for sub_name in subreddit_list:
+            try:
+                print(f"🚀 Posting to r/{sub_name} ...")
+                subreddit = reddit.subreddit(sub_name)
+                submission = subreddit.submit(
+                    title=reddit_title,
+                    selftext=reddit_body
+                )
+                print(f"✅ Posted to r/{sub_name}: {submission.url}")
+            
+                # Wait 60 seconds between posts to avoid rate limits
+                time.sleep(60)
+
+            except Exception as e:
+                print(f"❌ Error posting to r/{sub_name}: {e}")
+
         return True
-        
+
     except Exception as e:
         print(f"❌ Error posting to Reddit: {e}")
         return False
