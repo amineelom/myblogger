@@ -1,11 +1,10 @@
-name: Post to Reddit
+name: Reddit Auto Poster
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - '_posts/**'
+  workflow_run:
+    workflows: ["Daily Jekyll Build"]
+    types:
+      - completed
   workflow_dispatch:
     inputs:
       post_file:
@@ -14,10 +13,11 @@ on:
         type: string
 
 jobs:
-  post-to-reddit:
+  post_to_reddit:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
+      - name: Check out repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 2
@@ -31,14 +31,17 @@ jobs:
         run: |
           pip install praw pyyaml
 
-      - name: Post to Reddit
+      - name: Post today’s article to Reddit
         env:
           REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
           REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
           REDDIT_USERNAME: ${{ secrets.REDDIT_USERNAME }}
           REDDIT_PASSWORD: ${{ secrets.REDDIT_PASSWORD }}
           REDDIT_SUBREDDIT: ${{ secrets.REDDIT_SUBREDDIT }}
+          REDDIT_SUBREDDITS: ${{ secrets.REDDIT_SUBREDDITS }}
           SITE_URL: ${{ secrets.SITE_URL }}
           POST_FILE: ${{ github.event.inputs.post_file }}
+
         run: |
           python .github/scripts/post_to_reddit.py
+      

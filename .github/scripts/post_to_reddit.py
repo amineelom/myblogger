@@ -152,7 +152,8 @@ def main():
             print(f"❌ File not found: {post_path}")
     else:
         # Get changed posts from git
-        changed_posts = get_changed_posts()
+        today = datetime.utcnow().strftime("%Y-%m-%d")
+        changed_posts = [f for f in get_changed_posts() if f[:10] == today]
         
         if not changed_posts:
             print("No new or changed posts found")
