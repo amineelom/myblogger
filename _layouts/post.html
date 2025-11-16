@@ -84,19 +84,24 @@ layout: default
     {% endfor %}
   </p>
   {% endif %}
+  
 </article>
 <!-- RANDOM ARTICLES -->
-<script>
-// Create array of all posts
-const posts = [
+{% capture posts_json %}
+[
   {% for post in site.posts %}
   {
-    title: "{{ post.title | escape }}",
-    url: "{{ post.url | relative_url }}",
-    excerpt: "{{ post.excerpt | strip_html | escape }}"
+    "title": "{{ post.title | escape }}",
+    "url": "{{ post.url | relative_url }}",
+    "excerpt": "{{ post.excerpt | strip_html | escape }}"
   }{% unless forloop.last %},{% endunless %}
   {% endfor %}
-];
+]
+{% endcapture %}
+
+<script>
+// Create array of all posts
+const posts = {{ posts_json }};
 
 // Function to get random posts (excluding current post)
 function getRandomPosts(num, currentUrl) {
