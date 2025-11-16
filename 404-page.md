@@ -1,0 +1,50 @@
+---
+layout: default le
+title: "Page Not Found"
+permalink: /404.html
+---
+
+## Oops! That page can't be found.
+
+The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
+
+[Go back to the homepage]({{ site.url }})
+
+### Here are some random articles:
+
+<div id="random-posts"></div>
+
+<script>
+// Create array of all posts
+const posts = [
+  {% for post in site.posts %}
+  {
+    title: "{{ post.title | escape }}",
+    url: "{{ post.url | relative_url }}",
+    excerpt: "{{ post.excerpt | strip_html | escape }}"
+  }{% unless forloop.last %},{% endunless %}
+  {% endfor %}
+];
+
+// Function to get random posts
+function getRandomPosts(num) {
+  const shuffled = [...posts].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, num);
+}
+
+// Display random posts
+const randomPosts = getRandomPosts(5);
+const container = document.getElementById('random-posts');
+let html = '<ul>';
+
+randomPosts.forEach(post => {
+  html += `<li><a href="${post.url}"><strong>${post.title}</strong></a>`;
+  if (post.excerpt) {
+    html += `<br><small>${post.excerpt.substring(0, 100)}...</small>`;
+  }
+  html += '</li>';
+});
+
+html += '</ul>';
+container.innerHTML = html;
+</script>
