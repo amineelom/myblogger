@@ -121,6 +121,77 @@ code, pre{background:#f6f8fa; padding:.2rem .4rem; border-radius:.3rem;}
   }
 }
 
+/* Random Articles Styles - Integrated with your design system */
+.related-articles {
+  margin: 3rem 0;
+  padding: 2rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid var(--link);
+}
+
+.related-articles h3 {
+  margin-top: 0;
+  color: var(--fg);
+}
+
+.random-posts-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0;
+}
+
+.random-post-item {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border: 1px solid var(--border);
+  transition: all 0.2s ease;
+}
+
+.random-post-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.random-post-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.random-post-title {
+  color: var(--fg);
+  margin-bottom: 0.5rem;
+  display: block;
+  font-weight: 600;
+}
+
+.random-post-excerpt {
+  color: var(--muted);
+  font-size: 0.9em;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.cta-section {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+
+.cta-section a {
+  color: var(--link);
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.cta-section a:hover {
+  text-decoration: underline;
+}
+
 /* Quick Social Sharing for Home Page */
 .quick-social-sharing {
   display: flex;
