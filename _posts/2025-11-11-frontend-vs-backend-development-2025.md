@@ -2,7 +2,7 @@
 layout: post
 title: "Frontend vs Backend Development in 2025: Which Path Should You Choose?"
 categories: [web-development, programming, career-guide]
-date: 2025-11-12
+date: 2025-11-11
 author: "MarketReviews Team"
 excerpt: "Frontend vs Backend in 2025 — discover the differences, skills, and career paths to help you decide which side of web development fits your goals best."
 tags: [frontend vs backend 2025, web development paths, learn web dev 2025, frontend development, backend development]
