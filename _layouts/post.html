@@ -73,7 +73,7 @@ layout: default
   <div id="random-posts"></div>
   
   <div class="cta-section">
-    <p><strong>Want to stay updated?</strong> Check out more articles in the <a href="/archive/">archive</a> or <a href="/subscribe/">subscribe to our newsletter</a>.</p>
+    <p><strong>Want to stay updated?</strong> Check out more <a href="/archive/">articles</a> .</p>
   </div>
 </div>
   
@@ -84,7 +84,7 @@ layout: default
     {% endfor %}
   </p>
   {% endif %}
-  
+
 </article>
 <!-- RANDOM ARTICLES -->
 {% capture posts_json %}
@@ -101,7 +101,7 @@ layout: default
 
 <script>
 // Create array of all posts
-const posts = {{ posts_json }};
+const posts = JSON.parse('{{ posts_json | escape }}');
 
 // Function to get random posts (excluding current post)
 function getRandomPosts(num, currentUrl) {
