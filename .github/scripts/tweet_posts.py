@@ -12,7 +12,7 @@ import tweepy
 POSTS_DIR = '_posts'
 POSTED_LINKS_FILE = '.github/data/posted_links.json'
 MAX_TWEET_LENGTH = 280
-SITE_URL = 'https://marketreviews.com'
+SITE_URL = 'https://markereviews.com/'
 
 # Topic-specific call-to-actions
 TOPIC_CTAS = {
@@ -162,19 +162,90 @@ def clean_excerpt(excerpt):
     
     return clean_text.strip()
 
-def generate_post_url(slug, post_date, categories):
-    year = post_date.year
-    month = post_date.strftime('%m')
-    day = post_date.strftime('%d')
+def generate_post_url(filepath, slug, post_date, categories):
+    """Generate URL using the same logic as Jekyll/IndexNow workflow"""
     
-    if categories:
-        # If post has categories, use category path
-        cat_path = "/".join(categories[:1])  # Use first category only
+    # Use the same slugify function as your IndexNow workflow
+    def slugify(text):
+        text = text.lower()
+        text = re.sub(r'[^a-z0-9]+', '-', text)
+        text = text.strip('-')
+        return re.sub(r'-{2,}', '-', text)
+    
+    # Extract categories path like your IndexNow workflow does
+    def extract_categories_path(file_path):
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+            
+            # Extract frontmatter (between --- and ---)
+            fm_match = re.search(r'^---\s*\n(.*?)\n---', content, re.DOTALL)
+            if not fm_match:
+                return ""
+            
+            frontmatter = fm_match.group(1)
+            
+            # Find categories line
+            cat_match = re.search(r'^categories:\s*(.*?)$', frontmatter, re.MULTILINE | re.IGNORECASE)
+            if not cat_match:
+                return ""
+            
+            categories_line = cat_match.group(1).strip()
+            
+            # Parse categories array: [cat1, cat2, cat3] or YAML list
+            if categories_line.startswith('['):
+                # Array format: [cat1, cat2, cat3]
+                cats = re.findall(r'[\'"]?([^\'",\]]+)[\'"]?', categories_line)
+                cats = [slugify(cat.strip()) for cat in cats if cat.strip()]
+            else:
+                # YAML list format or single category
+                cats = []
+                lines = frontmatter.split('\n')
+                in_categories = False
+                for line in lines:
+                    if line.strip().startswith('categories:'):
+                        in_categories = True
+                        # Check if it's a single line with array
+                        if '[' in line and ']' in line:
+                            inner = re.search(r'\[(.*)\]', line)
+                            if inner:
+                                inner_cats = [x.strip().strip('"\'') for x in inner.group(1).split(',')]
+                                cats.extend([slugify(c) for c in inner_cats if c])
+                            break
+                        # Check if it's a single category
+                        elif ':' in line and not line.strip().endswith(':'):
+                            single_cat = line.split(':', 1)[1].strip()
+                            if single_cat and not single_cat.startswith('['):
+                                cats.append(slugify(single_cat.strip('"\'')))
+                            break
+                    elif in_categories:
+                        if line.strip().startswith('-'):
+                            cat_val = line.strip()[1:].strip().strip('"\'')
+                            if cat_val:
+                                cats.append(slugify(cat_val))
+                        else:
+                            break
+            
+            if cats:
+                return "/".join(cats)
+            return ""
+            
+        except Exception as e:
+            print(f"Error extracting categories from {file_path}: {e}")
+            return ""
+    
+    # Get categories path
+    cat_path = extract_categories_path(filepath)
+    
+    if cat_path:
         return f"{SITE_URL}/{cat_path}/{slug}/"
     else:
-        # If no categories, use date-based URL
+        # Fallback to date-based URL
+        year = post_date.year
+        month = post_date.strftime('%m')
+        day = post_date.strftime('%d')
         return f"{SITE_URL}/{year}/{month}/{day}/{slug}/"
-
+    
 def create_smart_tweet(title, excerpt, link, categories, tags):
     """Create a highly targeted tweet based on post content"""
     
@@ -262,7 +333,7 @@ def get_todays_posts():
         excerpt = post_metadata.get('excerpt') or post_metadata.get('description', '')
         
         # NOW generate the post URL (after categories is defined)
-        post_url = generate_post_url(slug, post_date, categories)
+        post_url = generate_post_url(str(post_file), slug, post_date, categories)
         
         # Skip if already tweeted
         if post_url in posted_links:
