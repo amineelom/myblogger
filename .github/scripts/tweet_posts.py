@@ -12,7 +12,7 @@ import tweepy
 POSTS_DIR = '_posts'
 POSTED_LINKS_FILE = '.github/data/posted_links.json'
 MAX_TWEET_LENGTH = 280
-SITE_URL = 'https://markereviews.com/'
+SITE_URL = 'https://markereviews.com'
 
 # Topic-specific call-to-actions
 TOPIC_CTAS = {
