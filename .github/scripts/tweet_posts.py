@@ -245,15 +245,7 @@ def get_todays_posts():
         if not post_metadata:
             continue
         
-        # Generate post URL (matching your IndexNow structure)
-        post_url = generate_post_url(slug, post_date, categories)
-        
-        # Skip if already tweeted
-        if post_url in posted_links:
-            print(f"⏭️ Already tweeted: {post_file.name}")
-            continue
-        
-        # Extract categories and tags from frontmatter
+        # Extract categories and tags from frontmatter FIRST
         categories = post_metadata.get('categories', [])
         if isinstance(categories, str):
             categories = [categories]
@@ -268,6 +260,14 @@ def get_todays_posts():
         
         # Get excerpt or use description
         excerpt = post_metadata.get('excerpt') or post_metadata.get('description', '')
+        
+        # NOW generate the post URL (after categories is defined)
+        post_url = generate_post_url(slug, post_date, categories)
+        
+        # Skip if already tweeted
+        if post_url in posted_links:
+            print(f"⏭️ Already tweeted: {post_file.name}")
+            continue
         
         todays_posts.append({
             'title': post_metadata.get('title', ''),
