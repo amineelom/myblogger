@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Top Programming Languages to Learn in 2025 (Ranked by Demand)"
+title: "Top Programming Languages to Learn in 2025"
 categories: [programming, software-development, tech-trends]
 date: 2025-10-25
 author: "MarketReviews Team"
