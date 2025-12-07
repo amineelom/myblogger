@@ -28,7 +28,7 @@ Tailwind lets you write classes like:
 <div class="bg-blue-600 text-white p-6 rounded-lg shadow-lg">
   Hello, Tailwind!
 </div>
-````
+```
 
 Instead of creating custom CSS rules like:
 
