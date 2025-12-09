@@ -1,4 +1,4 @@
-# myblogger[https://markereviews.com/]
+# myblogger https://markereviews.com/
 
 Static blog built with **Jekyll** + GitHub Pages.
 
@@ -15,5 +15,5 @@ Static blog built with **Jekyll** + GitHub Pages.
 
 ## License
 MIT
-# myblogger[https://markereviews.com/]
-[https://markereviews.com/]https://markereviews.com/
+# myblogger
+https://markereviews.com/
