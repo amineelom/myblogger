@@ -78,6 +78,14 @@ minifier:
   compress_json: true
   remove_comments: true
 
+# Auto internal linking (_plugins/internal_links.rb). Links the first mention
+# of another post's topic phrase to that post, with anti-spam guardrails.
+auto_internal_links:
+  enabled: true
+  max_per_page: 4    # cap links injected per post
+  min_words: 2       # ignore single-word anchors
+  min_chars: 10      # ignore very short anchors
+
 # Build output
 sass:
   style: compressed
