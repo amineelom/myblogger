@@ -21,8 +21,11 @@ description: "Browse every MarkeReviews article — honest tech reviews, compari
   {% assign posts_sorted = site.posts | sort: "date" | reverse %}
   {% for post in posts_sorted %}
     <li class="article-item" data-title="{{ post.title | downcase | escape }}" data-cats="{% for c in post.categories %}{{ c }} {% endfor %}{% for t in post.tags %}{{ t | downcase }} {% endfor %}">
-      <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-      <span class="muted"> · {{ post.date | date: "%b %d, %Y" }}</span>
+      <a class="article-thumb" href="{{ post.url | relative_url }}" aria-hidden="true" tabindex="-1">{% include thumb.html post=post class="thumb-sm" %}</a>
+      <div class="article-item-body">
+        <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+        <span class="muted"> · {{ post.date | date: "%b %d, %Y" }}</span>
+      </div>
     </li>
   {% endfor %}
 </ul>

@@ -6,13 +6,16 @@ title: Home
 <ul class="post-list">
   {% assign posts_sorted = site.posts | sort: "date" | reverse %}
   {% for post in posts_sorted limit: 10 %}
-    <li>
-      <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-      <span class="muted"> · {{ post.date | date: "%b %d, %Y" }}</span>
-      {% if post.excerpt %}<p class="excerpt">{{ post.excerpt | strip_html | truncate: 160 }}</p>{% endif %}
-      {% if post.tags %}<p class="tags">Tags: {% for t in post.tags %}<a href="{{ '/tags/#' | append: t | relative_url }}">#{{ t }}</a> {% endfor %}</p>{% endif %}
+    <li class="post-card">
+      <a class="post-card-media" href="{{ post.url | relative_url }}" aria-hidden="true" tabindex="-1">{% include thumb.html post=post %}</a>
+      <div class="post-card-body">
+        <a class="post-card-title" href="{{ post.url | relative_url }}">{{ post.title }}</a>
+        <span class="muted"> · {{ post.date | date: "%b %d, %Y" }}</span>
+        {% if post.excerpt %}<p class="excerpt">{{ post.excerpt | strip_html | truncate: 160 }}</p>{% endif %}
+        {% if post.tags %}<p class="tags">Tags: {% for t in post.tags %}<a href="{{ '/tags/#' | append: t | relative_url }}">#{{ t }}</a> {% endfor %}</p>{% endif %}
 
-      {% include social-share.html url=post.url title=post.title compact=true %}
+        {% include social-share.html url=post.url title=post.title compact=true %}
+      </div>
     </li>
   {% endfor %}
 </ul>

@@ -14,8 +14,11 @@
       {% assign key = "|" | append: p.url | append: "|" %}
       {% if count < maxRelated %}{% unless seen contains key %}
         <li class="random-post-item">
-          <a href="{{ p.url | relative_url }}" class="random-post-link"><strong class="random-post-title">{{ p.title }}</strong></a>
-          {% if p.excerpt %}<p class="random-post-excerpt">{{ p.excerpt | strip_html | truncate: 110 }}</p>{% endif %}
+          <a href="{{ p.url | relative_url }}" class="random-post-thumb" aria-hidden="true" tabindex="-1">{% include thumb.html post=p class="thumb-sm" %}</a>
+          <div class="random-post-text">
+            <a href="{{ p.url | relative_url }}" class="random-post-link"><strong class="random-post-title">{{ p.title }}</strong></a>
+            {% if p.excerpt %}<p class="random-post-excerpt">{{ p.excerpt | strip_html | truncate: 110 }}</p>{% endif %}
+          </div>
         </li>
         {% assign seen = seen | append: p.url | append: "|" %}
         {% assign count = count | plus: 1 %}
@@ -27,8 +30,11 @@
       {% assign key = "|" | append: p.url | append: "|" %}
       {% if count < maxRelated %}{% unless seen contains key %}
         <li class="random-post-item">
-          <a href="{{ p.url | relative_url }}" class="random-post-link"><strong class="random-post-title">{{ p.title }}</strong></a>
-          {% if p.excerpt %}<p class="random-post-excerpt">{{ p.excerpt | strip_html | truncate: 110 }}</p>{% endif %}
+          <a href="{{ p.url | relative_url }}" class="random-post-thumb" aria-hidden="true" tabindex="-1">{% include thumb.html post=p class="thumb-sm" %}</a>
+          <div class="random-post-text">
+            <a href="{{ p.url | relative_url }}" class="random-post-link"><strong class="random-post-title">{{ p.title }}</strong></a>
+            {% if p.excerpt %}<p class="random-post-excerpt">{{ p.excerpt | strip_html | truncate: 110 }}</p>{% endif %}
+          </div>
         </li>
         {% assign seen = seen | append: p.url | append: "|" %}
         {% assign count = count | plus: 1 %}
