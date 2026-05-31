@@ -2,6 +2,8 @@
 layout: post
 title: "What Is Reinforcement Learning? (Beginner-Friendly Guide)"
 categories: [artificial-intelligence, machine-learning, ai-basics]
+redirect_from:
+  - /artificial-intelligence/machine-learning/ai-basics/what-is-reinforcement-learning-beginner-friendly-guide/
 date: 2025-11-25
 author: "MarketReviews Team"
 excerpt: "Learn reinforcement learning in this beginner-friendly guide. Understand how RL works, key concepts, algorithms, rewards, agents, and real-world applications."

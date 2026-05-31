@@ -2,6 +2,8 @@
 layout: post
 title: "CSS Basics for Beginners (2025 Guide to Styling Websites)"
 categories: [web-development, css, coding-basics]
+redirect_from:
+  - /web-development/css/coding-basics/css-basics-for-beginners-2025/
 date: 2025-09-23
 author: "MarketReviews Team"
 excerpt: "Learn CSS basics in 2025 with this beginner’s guide. Discover selectors, properties, values, and how to style responsive websites fast."

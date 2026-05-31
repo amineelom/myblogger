@@ -2,6 +2,8 @@
 layout: post
 title: "What Is Tailwind CSS? (2025 Guide for Beginners)"
 categories: [web-development, css, tailwind, frontend]
+redirect_from:
+  - /web-development/css/tailwind/frontend/what-is-tailwind-css-2025-beginners-guide/
 date: 2025-12-08
 author: "MarketReviews Team"
 excerpt: "Learn Tailwind CSS in this 2025 beginner guide. Discover utility classes, responsive design, setup steps, and Tailwind vs CSS comparisons."

@@ -2,6 +2,8 @@
 layout: post
 title: "How to Build a Portfolio Website in 2025 (Without Coding Skills)"
 categories: [web-design, no-code, portfolio-tips]
+redirect_from:
+  - /web-design/no-code/portfolio-tips/build-portfolio-website-2025-no-code-guide/
 date: 2025-10-24
 author: "MarketReviews Team"
 excerpt: "Learn how to build a professional portfolio website in 2025—without writing a single line of code. Explore the best no-code website builders, design hacks, and tips to showcase your work like a pro."

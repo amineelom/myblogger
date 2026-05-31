@@ -2,6 +2,8 @@
 layout: post
 title: "What Is Fine-Tuning? 2025 Guide to Training Custom AI Models"
 categories: [artificial-intelligence, machine-learning, llm-training]
+redirect_from:
+  - /artificial-intelligence/machine-learning/llm-training/what-is-fine-tuning-custom-ai-models-2025/
 date: 2025-12-13
 author: "MarketReviews Team"
 excerpt: "Learn what fine-tuning is and how to create custom AI models in 2025. Understand when to fine-tune, step-by-step processes, costs, and best practices for adapting LLMs to your specific needs."

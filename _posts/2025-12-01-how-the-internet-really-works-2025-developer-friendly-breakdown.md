@@ -1,7 +1,9 @@
 ---
 layout: post
 title: "How the Internet Really Works (2025 Developer-Friendly Breakdown)"
-categories: [web-23development, networking, internet-basics]
+categories: [web-development, networking, internet-basics]
+redirect_from:
+  - /web-23development/networking/internet-basics/how-the-internet-really-works-2025-developer-friendly-breakdown.md/
 date: 2025-12-01
 author: "MarketReviews Team"
 excerpt: "A beginner-friendly 2025 breakdown of how the internet truly works. Learn IP addresses, DNS, HTTP, routing, packets, cloud, security, and modern networking in simple terms."

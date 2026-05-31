@@ -4,4 +4,5 @@ gem "webrick"
 gem "jekyll-feed"
 gem "jekyll-sitemap"
 gem "jekyll-seo-tag"
+gem "jekyll-redirect-from"
 gem 'jekyll-minifier'

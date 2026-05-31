@@ -21,17 +21,23 @@ module Jekyll
         
         # Skip internal links
         next match if href.include?('markereviews.com')
-        
-        # Check if rel already exists
+
+        # Affiliate/tracking links should also carry rel="sponsored" (set here,
+        # server-side, so search engines actually see it — JS-set rel is unreliable).
+        affiliate = href.match?(/(\baff\b|\bref\b|utm_|tag=|shareasale|impact|partner|r=\d+)/i)
+
+        # Build the required rel tokens for this link.
+        needed = %w[nofollow noopener]
+        needed << 'sponsored' if affiliate
+
         if attrs_after.include?('rel="')
-          attrs_after = attrs_after.gsub(/rel="([^"]*)"/) do |rel_match|
+          attrs_after = attrs_after.gsub(/rel="([^"]*)"/) do
             rel_content = $1
-            rel_content += ' nofollow' unless rel_content.include?('nofollow')
-            rel_content += ' noopener' unless rel_content.include?('noopener')
-            "rel=\"#{rel_content}\""
+            needed.each { |tok| rel_content += " #{tok}" unless rel_content.include?(tok) }
+            "rel=\"#{rel_content.strip}\""
           end
         else
-          attrs_after += ' rel="nofollow noopener"'
+          attrs_after += " rel=\"#{needed.join(' ')}\""
         end
         
         "<a#{attrs_before}href=\"#{href}\"#{attrs_after}>"

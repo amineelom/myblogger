@@ -2,6 +2,8 @@
 layout: post
 title: "JavaScript Basics for Beginners (2025 Web Dev Starter Guide)"
 categories: [javascript, web-development, programming]
+redirect_from:
+  - /javascript/web-development/programming/javascript-basics-for-beginners-2025-web-dev-starter-guide/
 date: 2025-10-20
 author: "MarketReviews Team"
 excerpt: "Learn JavaScript basics in 2025 with this complete beginner's guide. Understand syntax, variables, functions, DOM manipulation, and more to build your first interactive website."

@@ -2,6 +2,8 @@
 layout: post
 title: "What Is Prompt Engineering? (2025 Guide for Developers)"
 categories: [ai, machine-learning, development, prompt-engineering]
+redirect_from:
+  - /ai/machine-learning/development/prompt-engineering/what-is-prompt-engineering-2025-guide/
 date: 2025-12-02
 author: "MarketReviews Team"
 excerpt: "Learn what prompt engineering is in 2025 with this complete beginner-friendly guide for developers. Understand LLM optimization, prompt patterns, AI workflow improvements, and real-world examples."
