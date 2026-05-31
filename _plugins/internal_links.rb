@@ -70,8 +70,14 @@ module Jekyll
         end
       end
       map = []
-      claims.each { |p, urls| map << [p, urls.first] if urls.length == 1 }
-      map.sort_by { |p, _| -p.length }
+      claims.each do |p, urls|
+        next unless urls.length == 1
+        # Precompile the regex ONCE per phrase (huge speedup vs compiling it for
+        # every text node of every post).
+        re = /(?<![A-Za-z0-9])(#{Regexp.escape(p)})(?![A-Za-z0-9])/i
+        map << [p, urls.first, re]
+      end
+      map.sort_by { |entry| -entry[0].length }
     end
 
     def process(doc)
@@ -119,9 +125,8 @@ module Jekyll
     # At most ONE replacement per text node (avoids matching inside freshly
     # inserted markup), respecting the per-page budget.
     def link_one(text, page_url, count)
-      @map.each do |phrase, url|
+      @map.each do |_phrase, url, re|
         next if url == page_url || @used[url]
-        re = /(?<![A-Za-z0-9])(#{Regexp.escape(phrase)})(?![A-Za-z0-9])/i
         if text =~ re
           text = text.sub(re, "<a href=\"#{url}\" class=\"auto-link\">\\1</a>")
           @used[url] = true

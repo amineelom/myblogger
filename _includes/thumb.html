@@ -1,0 +1,8 @@
+{% comment %}
+  Renders a post thumbnail. Params:
+    include.post  - the post object
+    include.class - extra CSS class (default: post-thumb)
+  Resolution: post.thumbnail -> post.image (OG image) -> default placeholder.
+{% endcomment %}
+{% assign thumb = include.post.thumbnail | default: include.post.image | default: '/assets/images/thumbnails/default.png' %}
+<img src="{{ thumb | relative_url }}" alt="{{ include.post.title | escape }}" class="{{ include.class | default: 'post-thumb' }}" loading="lazy" decoding="async" width="800" height="450">
