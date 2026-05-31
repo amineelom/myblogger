@@ -117,18 +117,8 @@ jobs:
               if [ "$post_date" = "$today" ]; then
                 title_only="${filename#????-??-??-}"
                 slug="${title_only%.md}"
-                slug="${slug,,}"
-
-                cat_path=""
-                if c=$(extract_categories_path "$f"); then
-                  cat_path="$c"
-                fi
-
-                if [ -n "$cat_path" ]; then
-                  URLS+=("$BASE_URL/$cat_path/$slug/")
-                else
-                  URLS+=("$BASE_URL/$slug/")
-                fi
+                slug="${slug#-}"   # strip leading dash; permalink is flat /:title/ (case preserved, like Jekyll)
+                URLS+=("$BASE_URL/$slug/")
               fi
             done
           else
@@ -159,16 +149,8 @@ jobs:
 
                   title_only="${file#????-??-??-}"
                   slug="${title_only%.md}"
-                  slug="${slug,,}"
-                  cat_path=""
-                  if c=$(extract_categories_path "$f"); then
-                    cat_path="$c"
-                  fi
-                  if [ -n "$cat_path" ]; then
-                    URLS+=("$BASE_URL/$cat_path/$slug/")
-                  else
-                    URLS+=("$BASE_URL/$slug/")
-                  fi
+                  slug="${slug#-}"   # strip leading dash; permalink is flat /:title/ (case preserved, like Jekyll)
+                  URLS+=("$BASE_URL/$slug/")
                   ;;
                 pages/*.md)
                   fname="${f#pages/}"

@@ -2,6 +2,8 @@
 layout: post
 title: "What Is Serverless? Pros, Cons, and When to Use It"
 categories: [cloud-computing, serverless, devops]
+redirect_from:
+  - /cloud-computing/serverless/devops/what-is-serverless-pros-cons-and-when-to-use-it/
 date: 2025-11-27
 author: "MarketReviews Team"
 excerpt: "Learn what serverless computing is, how it works, its advantages and downsides, and when to choose it over traditional hosting."

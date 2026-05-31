@@ -1,0 +1,48 @@
+{% comment %}
+  Build-time related posts. Matches on shared categories first (in order),
+  dedupes by URL via the `seen` string, then tops up with the most recent
+  posts so we always show up to `maxRelated`. Renders inline (Liquid has no
+  array `push`), tracking `count` so the wrapper only shows when we have items.
+  Replaces the old client-side "dump every post into JS" approach.
+{% endcomment %}
+{% assign maxRelated = 3 %}
+{% assign count = 0 %}
+{% assign seen = "|" | append: page.url | append: "|" %}
+{% capture related_items %}
+  {% for cat in page.categories %}
+    {% for p in site.categories[cat] %}
+      {% assign key = "|" | append: p.url | append: "|" %}
+      {% if count < maxRelated %}{% unless seen contains key %}
+        <li class="random-post-item">
+          <a href="{{ p.url | relative_url }}" class="random-post-link"><strong class="random-post-title">{{ p.title }}</strong></a>
+          {% if p.excerpt %}<p class="random-post-excerpt">{{ p.excerpt | strip_html | truncate: 110 }}</p>{% endif %}
+        </li>
+        {% assign seen = seen | append: p.url | append: "|" %}
+        {% assign count = count | plus: 1 %}
+      {% endunless %}{% endif %}
+    {% endfor %}
+  {% endfor %}
+  {% if count < maxRelated %}
+    {% for p in site.posts %}
+      {% assign key = "|" | append: p.url | append: "|" %}
+      {% if count < maxRelated %}{% unless seen contains key %}
+        <li class="random-post-item">
+          <a href="{{ p.url | relative_url }}" class="random-post-link"><strong class="random-post-title">{{ p.title }}</strong></a>
+          {% if p.excerpt %}<p class="random-post-excerpt">{{ p.excerpt | strip_html | truncate: 110 }}</p>{% endif %}
+        </li>
+        {% assign seen = seen | append: p.url | append: "|" %}
+        {% assign count = count | plus: 1 %}
+      {% endunless %}{% endif %}
+    {% endfor %}
+  {% endif %}
+{% endcapture %}
+{% if count > 0 %}
+<aside class="related-articles">
+  <h3>Continue Reading</h3>
+  <p>If you enjoyed this article, you might like these too:</p>
+  <ul class="random-posts-list">{{ related_items }}</ul>
+  <div class="cta-section">
+    <p><strong>Want to stay updated?</strong> Check out more <a href="{{ '/articles/' | relative_url }}">articles</a>.</p>
+  </div>
+</aside>
+{% endif %}

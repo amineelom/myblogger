@@ -2,6 +2,8 @@
 layout: post
 title: "How to Speed Up Your Website (2025 Performance Optimization Guide)"
 categories: [web-development, seo, website-optimization]
+redirect_from:
+  - /web-development/seo/website-optimization/how-to-speed-up-your-website-2025-performance-optimization-guide/
 date: 2025-10-11
 author: "MarketReviews Team"
 excerpt: "Learn how to speed up your website in 2025 with these expert optimization tips. Boost loading time, improve Core Web Vitals, and enhance user experience."

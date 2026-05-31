@@ -1,13 +1,24 @@
 title: "MarkeReviews"
 tagline: "Affiliate tech & tools"
 author: MarkeReviews
-email: your@email.com
+email: amineelom203@gmail.com
 description: "Honest reviews, comparisons, and tutorials."
-url: "https://markereviews.com"   
-baseurl: ""                     
-permalink: /:categories/:title/
+url: "https://markereviews.com"
+baseurl: ""
+permalink: /:title/
 markdown: kramdown
 timezone: Africa/Casablanca
+
+# jekyll-seo-tag inputs: default social/SEO image + twitter card style.
+# Individual posts can override with an `image:` field in their front matter.
+logo: /assets/images/default-monochrome-black.svg
+image: /assets/images/og-default.png
+twitter:
+  card: summary_large_image
+social:
+  name: MarkeReviews
+  links:
+    - https://markereviews.com
 
 # Enable safe, GitHub-Pages-friendly plugins
 plugins:
@@ -15,9 +26,20 @@ plugins:
   - jekyll-sitemap
   - jekyll-seo-tag
   - jekyll-minifier
+  - jekyll-redirect-from
 
 include:
   - f23529503e774ad79005911ed314be91.txt
+
+# Keep post.md as a copy-paste template for new articles, but don't build it
+# into a thin /post/ page.
+exclude:
+  - post.md
+  - vendor
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - .bundle
 
 # Navigation (you can add/remove items)
 nav:
@@ -36,12 +58,18 @@ nav:
   - title: Privacy
     url: /privacy/
 
-# Collections or defaults (assign default layout)
+# Collections or defaults (assign default layout + default social image
+# so jekyll-seo-tag emits og:image / twitter image on every page;
+# individual posts can override `image:` in their own front matter).
 defaults:
   - scope: {path: ""}
-    values: {layout: default}
+    values:
+      layout: default
+      image: /assets/images/og-default.png
   - scope: {path: "", type: posts}
-    values: {layout: post}
+    values:
+      layout: post
+      image: /assets/images/og-default.png
     
 # Minifier settings
 minifier:

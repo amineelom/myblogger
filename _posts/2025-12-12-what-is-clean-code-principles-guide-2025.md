@@ -2,6 +2,8 @@
 layout: post
 title: "What Is Clean Code? 2025 Principles for Writing Better Software"
 categories: [software-development, coding-practices, programming]
+redirect_from:
+  - /software-development/coding-practices/programming/what-is-clean-code-principles-guide-2025/
 date: 2025-12-12
 author: "MarketReviews Team"
 excerpt: "Learn clean code principles for 2025. Discover how to write maintainable, readable code that other developers (and future you) will thank you for with practical examples and best practices."

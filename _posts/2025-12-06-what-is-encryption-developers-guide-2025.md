@@ -2,6 +2,8 @@
 layout: post
 title: "What Is Encryption? Simple Explanation for Developers (2025 Edition)"
 categories: [cybersecurity, web-development, coding-basics]
+redirect_from:
+  - /cybersecurity/web-development/coding-basics/what-is-encryption-developers-guide-2025/
 date: 2025-12-06
 author: "MarketReviews Team"
 excerpt: "Learn encryption basics for developers in 2025. Understand symmetric vs asymmetric encryption, hashing vs encryption, and how to implement cryptography securely in your applications."

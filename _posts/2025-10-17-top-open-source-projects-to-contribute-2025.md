@@ -2,6 +2,8 @@
 layout: post
 title: "Top 10 Open-Source Projects to Contribute to in 2025"
 categories: [open-source, web-development, coding-careers]
+redirect_from:
+  - /open-source/web-development/coding-careers/top-open-source-projects-to-contribute-2025/
 date: 2025-10-17
 author: "MarketReviews Team"
 excerpt: "Looking to boost your portfolio in 2025? Discover the top 10 open-source projects you can contribute to right now. Ideal for beginners, students, and developers eager to grow their skills and network."

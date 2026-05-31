@@ -2,6 +2,8 @@
 layout: post
 title: "How AI Is Changing Web Design in 2025"
 categories: [web-design, artificial-intelligence, ui-ux]
+redirect_from:
+  - /web-design/artificial-intelligence/ui-ux/how-ai-is-changing-web-design-in-2025/
 date: 2025-10-09
 author: "MarketReviews Team"
 excerpt: "Explore how AI is revolutionizing web design in 2025. Discover AI tools for designers, automation trends, and how artificial intelligence is shaping the future of web creativity."

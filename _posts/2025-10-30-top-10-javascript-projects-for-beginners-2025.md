@@ -2,6 +2,8 @@
 layout: post
 title: "Top 10 JavaScript Projects for Beginners in 2025 (With Source Code)"
 categories: [web-development, javascript, coding-projects]
+redirect_from:
+  - /web-development/javascript/coding-projects/top-10-javascript-projects-for-beginners-2025/
 date: 2025-10-30
 author: "MarketReviews Team"
 excerpt: "Discover the top 10 JavaScript projects for beginners in 2025 — complete with source code, tutorials, and tips to learn JS fast."

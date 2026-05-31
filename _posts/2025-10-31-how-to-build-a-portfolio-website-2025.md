@@ -2,6 +2,8 @@
 layout: post
 title: "How to Build a Portfolio Website in 2025 (For Developers & Designers)"
 categories: [web-development, portfolio, design]
+redirect_from:
+  - /web-development/portfolio/design/how-to-build-a-portfolio-website-2025/
 date: 2025-10-31
 author: "MarketReviews Team"
 excerpt: "Learn how to build a modern portfolio website in 2025 — for developers and designers. Includes step-by-step setup, tools, hosting, and design tips."

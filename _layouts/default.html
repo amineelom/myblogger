@@ -1,49 +1,13 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <link rel="icon" href="{{ site.baseurl }}/assets/images/favicon.png" type="image/x-icon">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  {% if page.keywords %}
-  <meta name="keywords" content="{{ page.keywords | escape }}" />
-{% endif %}
-  <link href="{{ site.baseurl }}/assets/css/style.css?v={{ site.time | date: '%s' }}" rel="stylesheet">
-  <link rel="alternate" type="application/rss+xml" title="{{ site.title }} Feed" href="{{ site.baseurl }}/feed.xml">
-  {% seo %}
-  <script defer src="{{ site.baseurl }}/assets/js/affiliate.js"></script>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-H9B8JQZF1M"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);} 
-    gtag('js', new Date());
-
-    gtag('config', 'G-H9B8JQZF1M');
-  </script>
-
-  
-<!-- Yandex.Metrika counter -->
-  <script type="text/javascript">
-      (function(m,e,t,r,i,k,a){
-          m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-          m[i].l=1*new Date();
-          for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-          k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-      })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=104145878', 'ym');
-
-      ym(104145878, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});
-  </script>
-  <noscript><div><img src="https://mc.yandex.ru/watch/104145878" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-<!-- /Yandex.Metrika counter -->
-
-
-
+  {% include head.html %}
 </head>
 <body>
   <div class="site-overlay" hidden></div>
   <header class="site-header">
-    <a href="{{ site.baseurl }}/">
-  <img src="{{ site.baseurl }}/assets/images/default-monochrome-black.svg" alt="MarketReviews Logo" style="height:30px;">
+    <a href="{{ '/' | relative_url }}">
+  <img src="{{ '/assets/images/default-monochrome-black.svg' | relative_url }}" alt="{{ site.title }} logo" style="height:30px;">
 </a>
     <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Toggle navigation">☰</button>
     <nav id="site-nav" class="site-nav">

@@ -79,18 +79,14 @@ def post_to_reddit(post_path):
     if permalink:
         post_url = f"{site_url}{permalink}"
     else:
-        # Extract date and slug from filename
+        # Extract date and slug from filename. Permalink is flat (/:title/),
+        # so the URL is just the filename slug (leading dashes stripped, matching Jekyll).
         filename = os.path.basename(post_path)
         match = re.match(r'(\d{4}-\d{2}-\d{2})-(.*?)\.md', filename)
         if match:
             date_str, slug = match.groups()
-            categories = frontmatter.get('categories', [])
-            if categories:
-                # Convert categories to URL-friendly format
-                category_path = '/'.join([cat.lower().replace(' ', '-') for cat in categories])
-                post_url = f"{site_url}/{category_path}/{slug}/"
-            else:
-                post_url = f"{site_url}/{slug}/"
+            slug = slug.lstrip('-')
+            post_url = f"{site_url}/{slug}/"
         else:
             print(f"Could not generate URL for {post_path}")
             return False
